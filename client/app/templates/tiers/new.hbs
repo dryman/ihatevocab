@@ -1,0 +1,60 @@
+{{#unless shouldHidden}}
+<form>
+  <fieldset>
+    <legend>
+      &nbsp;Creat New Tier&nbsp;
+    </legend>
+
+    <div class="row collapse">
+      <div class="small-3 large-2 columns">
+        <span class="prefix">Tier Name:</span>
+      </div>
+      <div class="small-5 large-6 columns">
+        {{ view Ember.TextField placeholder="name" valueBinding="name"}}
+        {{! input type="text" placeholder=name value=name}}
+      </div>
+
+      <div class="small-3 small-offset-1 columns">
+        {{view Ember.Select class="medium" contentBinding="dicts" valueBinding="selectedDict"}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-12 columns">
+        {{view Ember.TextArea valueBinding="textArea" rows="30"}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-12 columns">
+        <button class="button expand" {{action "runDict"}}>Generate!</button>
+      </div>
+    </div>
+  </fieldset>
+</form>
+{{/unless}}
+
+<div class="row">
+    <large-12 class="columns">
+          {{#each word in successWords}}
+      <fieldset>
+        <legend>&nbsp;{{word.value}}&nbsp;</legend>
+        <div class="row">
+          <div class="small-11 small-offset-1 columns">
+            <ol>
+              {{#each definition in word.definitions}}
+                <li>{{definition}}</li>
+              {{/each}}
+            </ol>
+          </div>
+        </div>
+      </fieldset>
+    {{/each}}  
+    </large-12>
+</div>
+
+{{#if shouldHidden}}
+  <div class="row">
+      <div class="large-12 columns">
+        <button class="button expand" {{action "submit"}}>Submit</button>
+      </div>
+  </div>
+{{/if}}
