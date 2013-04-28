@@ -1,4 +1,5 @@
 
+
 window.App = require('app');
 
 //////////////////////////////////
@@ -65,4 +66,11 @@ App.TiersRoute = Ember.Route.extend({
     //     this.render('tiers-root', { outlet: 'tiers' });
     // }
 });
+
+// App.ApplicationController = Ember.Controller.extend({
+//     doNothing: function(){
+//         return "";
+//     }
+// });
+
 
