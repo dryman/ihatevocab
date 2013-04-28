@@ -1,3 +1,4 @@
+{{#unless shouldHidden}}
 <form>
   <fieldset>
     <legend>
@@ -29,6 +30,7 @@
     </div>
   </fieldset>
 </form>
+{{/unless}}
 
 <div class="row">
     <large-12 class="columns">
@@ -46,12 +48,13 @@
         </div>
       </fieldset>
     {{/each}}  
-
-      <ul>
-        {{#each word in successWords}}
-          <li>{{word.word}}</li>
-        {{/each}}
-
-      </ul>
     </large-12>
 </div>
+
+{{#if shouldHidden}}
+  <div class="row">
+      <div class="large-12 columns">
+        <button class="button expand" {{action "submit"}}>Submit</button>
+      </div>
+  </div>
+{{/if}}

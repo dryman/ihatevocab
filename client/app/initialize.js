@@ -50,41 +50,42 @@ App.TiersNewController = Ember.ObjectController.extend({
     runDict: function(){
         var lines = this.get('textArea').match(/^.+?$/gm);
         var dict = this.get('selectedDict');
+        var that = this;
         lines.forEach(function(elem, idx, arr){
-            alert(elem);
-            $.getJSON("http://0.0.0.0:3000/"+dict+"/"+elem, null, function(data){
-                 alert("hello");
+            var url = "/dict/"+dict+"/"+elem;
+            $.get(url, null, function(data){
                 if (data && data.length) {
-                    this.get('successWords').pushObject(Ember.Object.create({value: elem, definitions: data}));
-                    alert(data);
+                    that.get('successWords').pushObject(Ember.Object.create({value: elem, definitions: data}));
                 } else {
                     this.get('failWords').pushObject(Ember.Object.create({value:elem}));
                 }
             });
-
-            // var promise = $.ajax({url: "http://0.0.0.0:3000/"+dict+"/"+elem,
-            //                       async: false,
-            //                       crossDomain: true,
-            //                       type: 'GET',
-            //                       dataType: 'jsonp',
-            //                       success: function(data){
-            //                           alert("hello");
-            //                           if (data && data.length) {
-            //                               this.get('successWords').pushObject(Ember.Object.create({value: elem, definitions: data}));
-            //                               alert(data);
-            //                           } else {
-            //                               this.get('failWords').pushObject(Ember.Object.create({value:elem}));
-            //                           }
-            //                       },
-            //                       error: function(){
-            //                           alert('failed');
-            //                       }
-
-            //                      });
         });
+        that.set('shouldHidden', true);
+        that.set('textArea', "");
     },
     successWords: [],
-    failWords: []
+    failWords: [],
+    shouldHidden: false,
+    submit: function(){
+        var tier = App.Tier.createRecord();
+        tier.set('name', this.get('name'));
+        this.get('successWords').forEach(function(item,idx,arr){
+            var word = App.Word.createRecord();
+            word.set('value', item.get('value'));
+            item.get('definitions').forEach(function(item1,idx1,arr1){
+                var mydef = App.Definition.createRecord();
+                mydef.set('value', item1);
+                word.get('definitions').pushObject(mydef);
+            });
+            tier.get('words').pushObject(word);
+        });
+
+        this.set('shouldHidden', false);
+        this.set('textArea', "");
+        this.transitionToRoute('tiers');
+    }
+
 });
 
 
