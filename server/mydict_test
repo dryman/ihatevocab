@@ -3,24 +3,35 @@ use 5.010;
 # use WordNet::QueryData;
 use strict;
 use warnings;
-use IPC::Run qw(run timeout);
-use IPC::Open2;
 use IPC::System::Simple qw(system systemx capture capturex runx);
 
-#my $w = WordNet::QueryData->new( noload => 1);
 
-# say $w->querySense("sagacious","glos");
-
-# my @cmd = ("wn", "sagacious", "-over");
-# my ($in, $out, $err);
-# 
-# run \@cmd, \$in, \$out, \$err, timeout( 10) or die "$?";
-# say $out;
-
-my $word1 = "sagacious";
-my $word = ";head /etc/passwd";
+my $word = $ARGV[0];
 my @args = ($word, "-over");
 
 my $out = capturex([0..30], "/usr/local/bin/wn", @args);
-say $out;
+if ($out){
+  my @defs;
+  for (split /^/m, $out) {
+    next unless / -- \((.+)\)$/;
+    my ($def) = split /\"/, $1;
+    push @defs, $def;
+    say $def;
+  }
+}
+# fast enough
+# open my $fh, "<cedict_ts.u8";
+# my %cedict_t;
+# my %cedict_s;
+# while(<$fh>) {
+#   my ($text, @rest) = split /\//;
+#   my ($traditional, $simplified) = split /\s/, $text;
+#   say $traditional;
+#   say $simplified;
+#   $cedict_t{$traditional} = \@rest;
+#   $cedict_s{$simplified} = \@rest;
+# }
+# 
+# say for @{$cedict_t{'龐'}};
+
 
