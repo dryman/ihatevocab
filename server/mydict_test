@@ -3,35 +3,47 @@ use 5.010;
 # use WordNet::QueryData;
 use strict;
 use warnings;
+use encoding "utf8";
+use Dancer;
 use IPC::System::Simple qw(system systemx capture capturex runx);
 
+set serializer => 'JSON';
+#set charset => 'UTF-8';
 
-my $word = $ARGV[0];
-my @args = ($word, "-over");
+get '/eedict/:name' => sub {
+    my $word = params->{name};
+    my @args = ($word, "-over");
 
-my $out = capturex([0..30], "/usr/local/bin/wn", @args);
-if ($out){
-  my @defs;
-  for (split /^/m, $out) {
-    next unless / -- \((.+)\)$/;
-    my ($def) = split /\"/, $1;
-    push @defs, $def;
-    say $def;
-  }
-}
+    my $out = capturex([0..30], "/usr/local/bin/wn", @args);
+    my @defs = ();
+    if ($out){
+      for (split /^/m, $out) {
+        next unless / -- \((.+)\)$/;
+        my ($def) = split /\"/, $1;
+        push @defs, $def;
+      }
+    }
+    return \@defs;
+};
+
 # fast enough
-# open my $fh, "<cedict_ts.u8";
-# my %cedict_t;
-# my %cedict_s;
-# while(<$fh>) {
-#   my ($text, @rest) = split /\//;
-#   my ($traditional, $simplified) = split /\s/, $text;
-#   say $traditional;
-#   say $simplified;
-#   $cedict_t{$traditional} = \@rest;
-#   $cedict_s{$simplified} = \@rest;
-# }
-# 
-# say for @{$cedict_t{'龐'}};
+open my $fh, "<cedict_ts.u8";
+my %cedict_t;
+my %cedict_s;
+while(<$fh>) {
+  my ($text, @rest) = split /\//;
+  pop @rest;
+  my ($traditional, $simplified) = split /\s/, $text;
+  $cedict_t{$traditional} = \@rest;
+  $cedict_s{$simplified} = \@rest;
+}
+close $fh;
 
+get '/cedict/:name' => sub {
+    my $word = utf8::encode(params->{name});
+    return $cedict_t{$word} if exists $cedict_t{$word};
+    return $cedict_s{$word} if exists $cedict_s{$word};
+    return {"abc", $word};
+};
 
+dance;
