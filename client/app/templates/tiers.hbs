@@ -7,11 +7,11 @@
       <div class="large-3 pull-9 columns">
         <div class="section-container verticle-nav">
           {{#each tier in controller}}
-            <section>
+            {{#linkTo "tier" tier tagName="section"}}
               <p class="title">
-                {{#linkTo "tier" tier}} {{tier.name}} {{/linkTo}}
+                <a href="#">{{tier.name}}</a>
               </p>
-            </section>
+            {{/linkTo}}
           {{/each}}
         </div>        
       </div>

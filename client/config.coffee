@@ -21,7 +21,8 @@ exports.config =
           'vendor/scripts/ember-latest.js',
           'vendor/scripts/ember-data-latest.js',
           'vendor/scripts/custom.modernizr.js',
-          'vendor/scripts/foundation.js'
+          'vendor/scripts/foundation.js',
+          'vendor/scripts/foundation.topbar.js'
           # 'vendor/scripts/foundation.alert.js',
           # 'vendor/scripts/foundation.clearing.js',
           # 'vendor/scripts/foundation.cookie.js',
@@ -34,7 +35,7 @@ exports.config =
           # 'vendor/scripts/foundation.reveal.js',
           # 'vendor/scripts/foundation.section.js',
           # 'vendor/scripts/foundation.tooltips.js',
-          # 'vendor/scripts/foundation.topbar.js'
+
           ]
           #todos
 

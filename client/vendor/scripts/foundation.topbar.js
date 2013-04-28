@@ -1,7 +1,7 @@
 /*jslint unparam: true, browser: true, indent: 2 */
 
 ;(function ($, window, document, undefined) {
-  'use strict';
+
 
   Foundation.libs.topbar = {
     name : 'topbar',
