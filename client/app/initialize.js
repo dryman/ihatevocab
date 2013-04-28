@@ -12,6 +12,7 @@ require('templates/tiers');
 require('templates/tiers/index');
 require('templates/tier');
 require('templates/tiers/new');
+require('templates/tier/flashcard');
 
 //////////////////////////////////
 // Models
@@ -88,6 +89,27 @@ App.TiersNewController = Ember.ObjectController.extend({
 
 });
 
+App.TierController = Ember.ObjectController.extend({
+    runFlashcard: false
+});
+
+// App.QuizesNewController = Ember.ObjectController.extend({
+//     questions: function(){
+//         var words = this.get('tier').get('words');
+//         var choices = Ember.Array.create();
+//         var questions = Ember.Array.create();
+//         words.forEach(function(item){
+//             questions.pushObject(
+//                 Ember.Object.create({
+//                     value: item.get('definitions').find(1),
+//                     answer: item,
+//                     choices: [item]
+//                 }));
+//         });
+        
+//     }
+
+// });
 
 /////////////////////////////////
 // Views
@@ -122,9 +144,7 @@ App.Router.map(function() {
     this.resource('tiers', function(){
         this.resource('tier', {path: ':tier_id'}, function(){
             this.route('edit');
-            this.resource('flashcards', function(){
-                this.route('flashcard', {path: ':word_id'});
-            });
+            // this.route('flashcard');
             this.resource('quizes', function(){
                 this.route('new');
             });
@@ -138,14 +158,17 @@ App.TiersRoute = Ember.Route.extend({
     model: function(){
         return App.Tier.find();
     }
-    // renderTemplate: function(){
-    //     this.render('tiers-root', { outlet: 'tiers' });
-    // }
 });
 
 App.TierEditRoute = Ember.Route.extend();
 App.TiersNewRoute = Ember.Route.extend();
+App.QuizesNewRoute = Ember.Route.extend({
+    setupController: function(controller, model){
+        controller.set('tier', model);
+    }
+});
 
+// App.TierFlashcardRoute = Ember.Route.extend();
 
 
 
