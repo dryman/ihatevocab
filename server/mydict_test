@@ -3,24 +3,63 @@ use 5.010;
 # use WordNet::QueryData;
 use strict;
 use warnings;
-use IPC::Run qw(run timeout);
-use IPC::Open2;
+use encoding "utf8";
+#use utf8;
+use Dancer;
 use IPC::System::Simple qw(system systemx capture capturex runx);
 
-#my $w = WordNet::QueryData->new( noload => 1);
+set serializer => 'JSON';
+set charset => 'UTF-8';
 
-# say $w->querySense("sagacious","glos");
+get '/eedict/:name' => sub {
+    my $word = params->{name};
+    my @args = ($word, "-over");
 
-# my @cmd = ("wn", "sagacious", "-over");
-# my ($in, $out, $err);
-# 
-# run \@cmd, \$in, \$out, \$err, timeout( 10) or die "$?";
-# say $out;
+    my $out = capturex([0..30], "/usr/local/bin/wn", @args);
+    my @defs = ();
+    if ($out){
+      for (split /^/m, $out) {
+        next unless / -- \((.+)\)$/;
+        my ($def) = split /\"/, $1;
+        push @defs, $def;
+      }
+    }
+    return \@defs;
+};
 
-my $word1 = "sagacious";
-my $word = ";head /etc/passwd";
-my @args = ($word, "-over");
+# fast enough
+open my $fh, "<cedict_ts.u8";
+my %cedict_t;
+my %cedict_s;
+while(<$fh>) {
+  chomp;
+  my ($text, @rest) = split /\//;
+  pop @rest;
+  my ($traditional, $simplified) = split /\s/, $text;
+  $cedict_t{$traditional} = \@rest;
+  $cedict_s{$simplified} = \@rest;
+}
+close $fh;
 
-my $out = capturex([0..30], "/usr/local/bin/wn", @args);
-say $out;
+get '/cedict/:name' => sub {
+    #my $word = utf8::encode(params->{name});
+    my $word = params->{name};
+    return $cedict_t{$word} if exists $cedict_t{$word};
+    return $cedict_s{$word} if exists $cedict_s{$word};
+    return {"abc", $word};
+};
 
+open $fh, "<ecdict.1.utf8";
+my %ecdict;
+while (<$fh>) {
+    chomp;
+    my ($key,$val) = split /\s+/, $_, 2;
+    $ecdict{$key} = [$val];
+}
+
+get '/ecdict/:name' => sub {
+    my $word = params->{name};
+    return $ecdict{$word};
+};
+
+dance;
