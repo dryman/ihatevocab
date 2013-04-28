@@ -1,0 +1,26 @@
+#!/usr/bin/env perl
+use 5.010;
+# use WordNet::QueryData;
+use strict;
+use warnings;
+use IPC::Run qw(run timeout);
+use IPC::Open2;
+use IPC::System::Simple qw(system systemx capture capturex runx);
+
+#my $w = WordNet::QueryData->new( noload => 1);
+
+# say $w->querySense("sagacious","glos");
+
+# my @cmd = ("wn", "sagacious", "-over");
+# my ($in, $out, $err);
+# 
+# run \@cmd, \$in, \$out, \$err, timeout( 10) or die "$?";
+# say $out;
+
+my $word1 = "sagacious";
+my $word = ";head /etc/passwd";
+my @args = ($word, "-over");
+
+my $out = capturex([0..30], "/usr/local/bin/wn", @args);
+say $out;
+
