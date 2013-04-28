@@ -20,7 +20,22 @@ exports.config =
           'vendor/scripts/handlebars-1.0.0-rc.3.js',
           'vendor/scripts/ember-latest.js',
           'vendor/scripts/ember-data-latest.js',
-          'vendor/scripts/bootstrap.js'
+          'vendor/scripts/custom.modernizr.js',
+          'vendor/scripts/foundation.js',
+          'vendor/scripts/foundation.topbar.js'
+          # 'vendor/scripts/foundation.alert.js',
+          # 'vendor/scripts/foundation.clearing.js',
+          # 'vendor/scripts/foundation.cookie.js',
+          # 'vendor/scripts/foundation.dropdown.js',
+          # 'vendor/scripts/foundation.forms.js',
+          # 'vendor/scripts/foundation.joyride.js',
+          # 'vendor/scripts/foundation.magellan.js',
+          # 'vendor/scripts/foundation.orbit.js',
+          # 'vendor/scripts/foundation.placeholder.js',
+          # 'vendor/scripts/foundation.reveal.js',
+          # 'vendor/scripts/foundation.section.js',
+          # 'vendor/scripts/foundation.tooltips.js',
+
           ]
           #todos
 
@@ -28,7 +43,10 @@ exports.config =
       defaultExtension: 'css'
       joinTo: 'stylesheets/app.css'
       order:
-        before: ['vendor/styles/bootstrap.css']
+        before: [
+          'vendor/styles/normalize.css'
+          'vendor/styles/foundation.css'
+          ]
         # todos
 
     templates:

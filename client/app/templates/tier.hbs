@@ -1,0 +1,33 @@
+
+
+<div class="row">
+  <div class="large-3 push-9 columns panel">
+    <ul class="side-nav">
+        <li>{{#linkTo "tier.edit" this}}Edit{{/linkTo}}</li>
+        <li>{{#linkTo "flashcards" this}}View FlashCards{{/linkTo}}</li>
+        <li>{{#linkTo "quizes" this}}View Quizes{{/linkTo}}</li>
+        <li>{{#linkTo "quizes.new" this}}Start a new Quiz{{/linkTo}}</li>
+    </ul>
+  </div>
+
+  <div class="large-9 pull-3 columns">
+    <h4> Tier {{id}} </h4>
+    <hr />
+    {{#each word in words}}
+      <fieldset>
+        <legend>&nbsp;{{word.value}}&nbsp;</legend>
+        <div class="row">
+          <div class="small-11 small-offset-1 columns">
+            <ol>
+              {{#each definition in word.definitions}}
+                <li>{{definition.value}}</li>
+              {{/each}}
+            </ol>
+          </div>
+        </div>
+      </fieldset>
+    {{/each}}  
+
+  </div>
+</div>
+
