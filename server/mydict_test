@@ -4,11 +4,12 @@ use 5.010;
 use strict;
 use warnings;
 use encoding "utf8";
+#use utf8;
 use Dancer;
 use IPC::System::Simple qw(system systemx capture capturex runx);
 
 set serializer => 'JSON';
-#set charset => 'UTF-8';
+set charset => 'UTF-8';
 
 get '/eedict/:name' => sub {
     my $word = params->{name};
@@ -31,6 +32,7 @@ open my $fh, "<cedict_ts.u8";
 my %cedict_t;
 my %cedict_s;
 while(<$fh>) {
+  chomp;
   my ($text, @rest) = split /\//;
   pop @rest;
   my ($traditional, $simplified) = split /\s/, $text;
@@ -40,10 +42,24 @@ while(<$fh>) {
 close $fh;
 
 get '/cedict/:name' => sub {
-    my $word = utf8::encode(params->{name});
+    #my $word = utf8::encode(params->{name});
+    my $word = params->{name};
     return $cedict_t{$word} if exists $cedict_t{$word};
     return $cedict_s{$word} if exists $cedict_s{$word};
     return {"abc", $word};
+};
+
+open $fh, "<ecdict.1.utf8";
+my %ecdict;
+while (<$fh>) {
+    chomp;
+    my ($key,$val) = split /\s+/, $_, 2;
+    $ecdict{$key} = [$val];
+}
+
+get '/ecdict/:name' => sub {
+    my $word = params->{name};
+    return $ecdict{$word};
 };
 
 dance;
