@@ -5,9 +5,15 @@
         {{outlet}}
       </div>
       <div class="large-3 pull-9 columns">
-        <h3>Global tier</h3>
+        <div class="section-container verticle-nav">
+          {{#each tier in controller}}
+            <section>
+              <p class="title">
+                {{#linkTo "tier" tier}} {{tier.name}} {{/linkTo}}
+              </p>
+            </section>
+          {{/each}}
+        </div>        
       </div>
     </div>
 </div>
-
-
