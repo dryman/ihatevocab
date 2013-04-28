@@ -1,10 +1,10 @@
 App.Tier.FIXTURES = [{
     id: 1,
-    name: 'Tier1',
+    name: 'GRE March 23',
     words: [1, 2]
 }, {
     id: 2,
-    name: 'Tier2',
+    name: 'TOEFL Jan 10',
     words: [3]
 }];
 
